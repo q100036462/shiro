@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title>后台登录</title>
+	<link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" />
+	<link rel="stylesheet" type="text/css" href="../static/css/login.css" />
+</head>
+
+<body>
+<div class="m-login-bg">
+	<div class="m-login">
+		<h3>后台系统登录</h3>
+		<div class="m-login-warp">
+			<form class="layui-form" id="user_login" action="/ajax">
+				<div class="layui-form-item">
+					<input type="text" id="username" name="username" required lay-verify="username" placeholder="用户名" autocomplete="off" class="layui-input">
+				</div>
+				<div class="layui-form-item">
+					<input type="text" id="password" name="password" required lay-verify="password" placeholder="密码" autocomplete="off" class="layui-input">
+				</div>
+				<div class="layui-form-item m-login-btn">
+					<div class="layui-inline">
+						<button class="layui-btn layui-btn-normal" lay-submit lay-filter="login">登录</button>
+					</div>
+					<div class="layui-inline">
+						<button type="reset" class="layui-btn layui-btn-primary">取消</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<p class="copyright">Copyright 2015-2016 by XIAODU</p>
+	</div>
+</div>
+<script src="../static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function() {
+        var form = layui.form(),
+            layer = layui.layer;
+
+        // 自定义验证规则
+        form.verify({
+            username: function(value) {
+                if(value.length < 5) {
+                    return '标题至少得5个字符啊';
+                }
+            },
+            password: [/(.+){6,12}$/, '密码必须6到12位']
+
+        });
+
+        //监听提交
+        // form.on('submit(login)', function(data) {
+        //     var username = document.getElementById("username").value;
+        //     var password = document.getElementById("password").value;
+        //     $.ajax({//异步请求返回给后台
+        //         type: "GET",
+        //         url: "http://localhost:8080/ajax",
+        //         data: {username:$("#username").val(), password:$("#password").val()},
+        //         dataType: "json",
+        //         success:function(data){
+        //             //这里获取到数据执行显示
+        //             alert(data);
+        //             if (data == "success") {
+        //                 layer.msg('登录成功');
+        //                 location.href = ".html";
+        //             }else {
+        //                 layer.msg('登录失败');
+        //             }
+        //         }
+        //     });
+        //     //防止页面跳转
+        //     return false;
+        // });
+
+    });
+</script>
+</body>
+
+</html>

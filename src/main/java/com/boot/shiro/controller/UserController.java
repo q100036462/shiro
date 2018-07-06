@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -23,10 +24,19 @@ public class UserController {
         return "page/user/user_list";
     }
 
+    @RequestMapping("/user2")
+    public String toUserlistPage2(){
+
+        return "page/user/user_list2";
+    }
+
     @RequestMapping("/userList")
     @ResponseBody
-    public Map<String, Object> findAll(Integer page,Integer pageSize){
+    public Map<String, Object> findAll(@RequestParam(value = "page",required = false) Integer page,@RequestParam(value = "pageSize",required = false) Integer pageSize){
         Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (pageSize == null){
+            pageSize = 10;
+        }
         PageInfo<User> pager = userService.findAll(page,pageSize);
         resultMap.put("code", 0);
         resultMap.put("msg", "");
@@ -41,11 +51,9 @@ public class UserController {
 
     @RequestMapping("/toUserPassword")
     public String toUserPassword(Integer userid, Model model){
-        User user = new User();
-        user.setUserId(userid);
-        User user1 = userService.selectOne(user);
-        user1.setPassword(null);
-        model.addAttribute("user",user1);
+        User user = userService.selectOneByPrimaryKey(userid);
+        user.setPassword(null);
+        model.addAttribute("user",user);
         return "page/user/user_password";
     }
 }

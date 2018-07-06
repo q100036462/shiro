@@ -9,6 +9,9 @@
         <result column="salt" jdbcType="VARCHAR" property="salt" />
     </resultMap>
 
+    <select id="selectByUserid" resultType="User" parameterType="java.lang.Integer">
+        select * from user where user_id = #{userid}
+    </select>
 
 
 </mapper>

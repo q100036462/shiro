@@ -36,7 +36,8 @@ public class UserService extends AbstractService<User>{
         return false;
     }
 
-    public User selectOne(User user){
-        return userMapper.selectOne(user);
+    public User selectOneByPrimaryKey(Integer userid){
+        User user = userMapper.selectByUserid(userid);
+        return user;
     }
 }

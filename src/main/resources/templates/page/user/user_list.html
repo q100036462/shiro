@@ -41,7 +41,7 @@
 		<span class="x-right" style="line-height:40px">共有数据：88 条</span>
 	</xblock>
 
-
+	<a onclick="layy()"></a>
 	<table class="layui-table"  style="width: 800px">
 		<thead>
 		<tr>
@@ -63,8 +63,11 @@
 <script type="text/javascript">
 
 
-    layui.use('laypage', function(){
+    layui.use(['laypage','layer'], function(){
         var laypage = layui.laypage;
+        var layer = layui.layer;
+
+
         var url = "/userList";
         var config = {page:1,pageSize:10};
         $.getJSON(url,config,function(res){
@@ -104,8 +107,8 @@
             content += "<td>"+o.type+"</td>";
             content += "<td>"+o.salt+"</td>";
             content += "<td>";
-            content += "	<a onclick=\"x_admin_show('修改密码','member-password.html',600,400)\" title=\"修改密码\" href=\"javascript:;\">";
-            content += "		<a class=\"layui-btn\" href=\"/toUserPassword\">修改密码</a>";
+            content += "	<a onclick=\"x_admin_show('修改密码','/toUserPassword?userid="+o.userId+"',600,400)\" title=\"修改密码\">";
+            content += "		<i class=\"layui-icon\">&#xe631;</i>";
             content += "	</a>";
             content += "</td>";
             content += "</tr>";

@@ -40,4 +40,12 @@ public class UserService extends AbstractService<User>{
         User user = userMapper.selectByUserid(userid);
         return user;
     }
+
+    public boolean updateUserTypeById(User user){
+        int i = userMapper.updateUserTypeById(user);
+        if (i >= 1){
+            return true;
+        }
+        return false;
+    }
 }

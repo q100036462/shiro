@@ -7,4 +7,6 @@ import tk.mybatis.mapper.common.Mapper;
 @Repository
 public interface UserMapper extends Mapper<User> {
     User selectByUserid(Integer userid);
+
+    int updateUserTypeById(User user);
 }

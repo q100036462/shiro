@@ -41,81 +41,67 @@
 		<span class="x-right" style="line-height:40px">共有数据：88 条</span>
 	</xblock>
 
-	<a onclick="layy()"></a>
-	<table class="layui-table"  style="width: 800px">
-		<thead>
-		<tr>
-			<th>ID</th>
-			<th>用户名</th>
-			<th>密码</th>
-			<th>用户状态</th>
-			<th>盐值</th>
-			<th>操作</th>
-		</tr>
-		</thead>
-		<tbody id="tbody">
 
-		</tbody>
-	</table>
+	<table id="table2" class="layui-table"  style="width: 800px"></table>
 	<div id="page1"></div>
 
 </div>
-<script type="text/javascript">
+<script type="text/html" id="checkboxTpl">
+	<input type="checkbox" name="type" value="{{d.userId}}" lay-skin="switch" lay-text="锁定|正常" lay-filter="lockDemo" {{ d.type == 0 ? 'checked' : '' }}>
+</script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        var form = layui.form;
+        table.render({
+            elem: '#table2',
+            url:'/userList',
+            height: 'full-352',
+            cols: [
+                [
+                    {type:'checkbox'},
+                    {field:'userId',  title: 'ID', sort: true},
+                    {field:'username', title: '用户名'},
+                    {field:'password',  title: '密码', sort: true},
+                    {field:'salt',  title: '盐值'},
+                    {field:'type', title: '类型',templet: '#checkboxTpl'}
+                ]
+            ],
+            page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: [ 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
+                cellMinWidth:100,
+                //,curr: 5 //设定初始在第 5 页
+                groups: 5, //只显示 1 个连续页码
+                first: true ,//不显示首页
+                last: true, //不显示尾页
+                limit:10
+            }
+        });
 
-
-    layui.use(['laypage','layer'], function(){
-        var laypage = layui.laypage;
-        var layer = layui.layer;
-
-
-        var url = "/userList";
-        var config = {page:1,pageSize:10};
-        $.getJSON(url,config,function(res){
-            laypage.render({
-                elem: 'page1',
-                count: res.count, //总条数
-                theme: '#FFB800', //自定义颜色
-                limits: [5,10,15,20,25],
-                layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip'],
-                jump: function(obj, first){
-                    if(!first){ //首次则不进入
-                        config.page = obj.curr;
-                        config.pageSize = obj.limit;
-                        getUserListByPage(url,config);
+        //监听锁定操作
+        form.on('switch(lockDemo)', function(obj){
+            var id = this.value;
+            var type = 1;
+            if (obj.elem.checked){
+                type = 0;
+            }
+            $.ajax({
+                type: 'post',
+                url: '/updateUserTypeById',
+                data: {
+                    userId:id,
+                    type:type
+                },
+                success: function(data){
+                    if (data == 'success'){
+                        layer.msg('更改成功');
+                    }else {
+                        layer.msg('更改失败');
                     }
                 }
             });
-            parseUserList(res,config.page);
         });
-
     });
-    //点击页数从后台获取数据
-    function getUserListByPage(url,config){
-        $.getJSON(url,config,function(res){
-            parseUserList(res,config.page);
-        });
-    }
-
-    //解析数据，currPage参数为预留参数，当删除一行刷新列表时，可以记住当前页而不至于显示到首页去
-    function parseUserList(res,currPage){
-        var content = "";
-        $.each(res.data, function (i, o) {
-            content += "<tr>";
-            content += "<td>"+o.userId+"</td>";
-            content += "<td>"+o.username+"</td>";
-            content += "<td>"+o.password+"</td>";
-            content += "<td>"+o.type+"</td>";
-            content += "<td>"+o.salt+"</td>";
-            content += "<td>";
-            content += "	<a onclick=\"x_admin_show('修改密码','/toUserPassword?userid="+o.userId+"',600,400)\" title=\"修改密码\">";
-            content += "		<i class=\"layui-icon\">&#xe631;</i>";
-            content += "	</a>";
-            content += "</td>";
-            content += "</tr>";
-        });
-        $('#tbody').html(content);
-    }
-
 </script>
 </body>
 

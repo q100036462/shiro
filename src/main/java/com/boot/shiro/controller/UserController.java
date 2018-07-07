@@ -24,12 +24,6 @@ public class UserController {
         return "page/user/user_list";
     }
 
-    @RequestMapping("/user2")
-    public String toUserlistPage2(){
-
-        return "page/user/user_list2";
-    }
-
     @RequestMapping("/userList")
     @ResponseBody
     public Map<String, Object> findAll(@RequestParam(value = "page",required = false) Integer page,@RequestParam(value = "pageSize",required = false) Integer pageSize){
@@ -55,5 +49,15 @@ public class UserController {
         user.setPassword(null);
         model.addAttribute("user",user);
         return "page/user/user_password";
+    }
+
+    @RequestMapping("/updateUserTypeById")
+    @ResponseBody
+    public String updateUserTypeById(User user){
+        boolean b = userService.updateUserTypeById(user);
+        if (b){
+            return "success";
+        }
+        return "error";
     }
 }

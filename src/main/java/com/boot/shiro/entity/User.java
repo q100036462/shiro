@@ -12,6 +12,8 @@ public class User {
 
     private String password;
 
+    private String birthday;
+
     private String salt;
     
     private Integer type;
@@ -40,6 +42,13 @@ public class User {
         this.password = password == null ? null : password.trim();
     }
 
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
 
     public String getSalt() {
         return salt;

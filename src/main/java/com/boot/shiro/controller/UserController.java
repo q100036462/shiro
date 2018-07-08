@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -56,8 +57,32 @@ public class UserController {
     public String updateUserTypeById(User user){
         boolean b = userService.updateUserTypeById(user);
         if (b){
+            return user.getType().toString();
+        }
+        return "error";
+    }
+
+    @RequestMapping("/toUserEdit")
+    public String toUserEdit(User user, Model model){
+        User user1 = userService.selectOneByPrimaryKey(user.getUserId());
+        user1.setPassword(null);
+        model.addAttribute("user",user1);
+        return "page/user/user_edit";
+    }
+    @RequestMapping("/updateUserById")
+    @ResponseBody
+    public String updateUserById(User user){
+        boolean b = userService.updateUserById(user);
+        if (b){
             return "success";
         }
         return "error";
     }
+//    @RequestMapping("/toUserPassword")
+//    public String toUserPassword(User user, Model model){
+//        User user1 = userService.selectOneByPrimaryKey(user.getUserId());
+//        user1.setPassword(null);
+//        model.addAttribute("user",user1);
+//        return "page/user/user_password";
+//    }
 }

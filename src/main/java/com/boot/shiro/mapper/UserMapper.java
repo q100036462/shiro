@@ -9,4 +9,6 @@ public interface UserMapper extends Mapper<User> {
     User selectByUserid(Integer userid);
 
     int updateUserTypeById(User user);
+
+    int updateUserById(User user);
 }

@@ -13,16 +13,26 @@
     <script type="text/javascript" src="../../../static/jquery/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="../../../static/lib/layui/layui.js" charset="utf-8"></script>
 </head>
-
-<body>
-<div class="x-body">
-    <form>
+<style>
+    .formdiv {
+        position: fixed;
+        left: 50%;
+        z-index: 11;
+        /*设定这个div的margin-top的负值为自身的高度的一半,margin-left的值也是自身的宽度的一半的负值.*/
+        /*宽为400,那么margin-top为-200px*/
+        /*高为200那么margin-left为-100px;*/
+        margin: 50px 0 0 -350px;
+    }
+</style>
+<body >
+<div class="formdiv">
+    <form action="/updateUserById">
         <div class="layui-form-item">
             <label for="L_username" class="layui-form-label">
                 <span class="x-red">*</span>用户ID
             </label>
             <div class="layui-input-inline">
-                <input th:value="${user.userId}" type="text" id="L_userId" name="userId" required="" autocomplete="off" class="layui-input">
+                <input th:value="${user.userId}" readonly="readonly" type="text" id="L_userId" name="userId" required="" autocomplete="off" class="layui-input">
             </div>
         </div>
 
@@ -31,7 +41,7 @@
                 <span class="x-red">*</span>用户名
             </label>
             <div class="layui-input-inline">
-                <input th:value="${user.username}" type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input">
+                <input th:value="${user.username}" readonly="readonly" type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input">
             </div>
         </div>
 
@@ -46,10 +56,10 @@
         <div class="layui-form-item">
             <label  class="layui-form-label">
             </label>
-            <button  class="layui-btn" lay-submit="save" >
-                保存
-            </button>
+            <input type="submit" value="提交" class="layui-btn">
+            <a href="/user"  class="layui-btn" >返回</a>
         </div>
+        <input th:value="${msg}" id="msg" style="display: none">
     </form>
 </div>
 <script>
@@ -57,27 +67,34 @@
 
         var layer = layui.layer;
         var laydate = layui.laydate;
+        var msg = $("#msg").val();
+        if (msg == "保存成功"){
+            layer.msg("保存成功");
+        }
+        if (msg == "保存失败") {
+            layer.msg("保存失败");
+        }
         laydate.render({
             elem: '#L_birthday'
         });
 
-        //监听提交
-        form.on('submit(save)', function(data){
-            $.ajax({
-                type: 'post',
-                url: '/updateUserById',
-                data: data.field,
-                dataType:'JSON',
-                success: function(data){
-                    if (data == 'success'){
-                        layer.msg("更改成功");
-                    }else {
-                        layer.msg('更改失败');
-                    }
-                }
-            });
-            return false;
-        });
+        // //监听提交
+        // form.on('submit(save)', function(data){
+        //     $.ajax({
+        //         type: 'post',
+        //         url: '/updateUserById',
+        //         data: data.field,
+        //         dataType:'JSON',
+        //         success: function(data){
+        //             if (data == 'success'){
+        //                 layer.msg("更改成功");
+        //             }else {
+        //                 layer.msg('更改失败');
+        //             }
+        //         }
+        //     });
+        //     return false;
+        // });
 
 
     });

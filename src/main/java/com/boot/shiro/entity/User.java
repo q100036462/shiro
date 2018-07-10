@@ -1,5 +1,7 @@
 package com.boot.shiro.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,6 +14,7 @@ public class User {
 
     private String password;
 
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private String birthday;
 
     private String salt;

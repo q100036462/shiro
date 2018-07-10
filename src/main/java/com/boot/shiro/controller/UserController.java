@@ -45,8 +45,8 @@ public class UserController {
     }
 
     @RequestMapping("/toUserPassword")
-    public String toUserPassword(Integer userid, Model model){
-        User user = userService.selectOneByPrimaryKey(userid);
+    public String toUserPassword(Integer userId, Model model){
+        User user = userService.selectOneByPrimaryKey(userId);
         user.setPassword(null);
         model.addAttribute("user",user);
         return "page/user/user_password";
@@ -70,19 +70,24 @@ public class UserController {
         return "page/user/user_edit";
     }
     @RequestMapping("/updateUserById")
+    public String updateUserById(User user,Model model){
+        boolean b = userService.updateUserById(user);
+        User user1 = userService.selectOneByPrimaryKey(user.getUserId());
+        if (b){
+            model.addAttribute("msg","保存成功");
+        }else {
+            model.addAttribute("msg","保存失败");
+        }
+        model.addAttribute("user",user1);
+        return "page/user/user_edit";
+    }
+    @RequestMapping("/updatePasswordById")
     @ResponseBody
-    public String updateUserById(User user){
+    public String updatePasswordById(User user){
         boolean b = userService.updateUserById(user);
         if (b){
             return "success";
         }
         return "error";
     }
-//    @RequestMapping("/toUserPassword")
-//    public String toUserPassword(User user, Model model){
-//        User user1 = userService.selectOneByPrimaryKey(user.getUserId());
-//        user1.setPassword(null);
-//        model.addAttribute("user",user1);
-//        return "page/user/user_password";
-//    }
 }

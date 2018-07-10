@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
@@ -7,51 +7,81 @@
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="../static/css/font.css">
-	<link rel="stylesheet" href="../static/css/xadmin.css">
+	<!--<link rel="stylesheet" href="../static/css/xadmin.css">-->
+	<link rel="stylesheet" href="../static/lib/layui/css/layui.css">
 	<script type="text/javascript" src="../static/jquery/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="../static/lib/layui/layui.js" charset="utf-8"></script>
 </head>
 
 <body>
-<div class="x-nav">
-      <span class="layui-breadcrumb">
-        <a href="">首页</a>
-        <a href="">演示</a>
-        <a>
-          <cite>导航元素</cite>
-		</a>
-      </span>
-	<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
-		<i class="layui-icon" style="line-height:30px">ဂ</i></a>
+<div>
+	<form style="margin-top: 10px">
+		<div class="layui-form-item">
+			<label for="L_username" class="layui-form-label">
+				<span style="color: red;">*</span>用户ID
+			</label>
+			<div class="layui-input-inline">
+				<input  type="text" id="L_userId" name="userId" required="" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label for="L_username" class="layui-form-label">
+				<span style="color: red;">*</span>用户名
+			</label>
+			<div class="layui-input-inline">
+				<input  type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label for="L_username" class="layui-form-label">
+				<span style="color: red;">*</span>生日
+			</label>
+			<div class="layui-input-inline">
+				<input  type="text" id="L_birthday" name="birthday" placeholder="yyyy-MM-dd" required="" lay-verify="date" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label  class="layui-form-label">
+			</label>
+			<button  class="layui-btn" onclick="test()" ><!--lay-submit="save"-->
+				保存
+			</button>
+		</div>
+	</form>
 </div>
-<div class="x-body">
-	<div class="layui-row">
-		<form class="layui-form layui-col-md12 x-so">
-			<input class="layui-input" placeholder="开始日" name="start" id="start">
-			<input class="layui-input" placeholder="截止日" name="end" id="end">
-			<input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-			<button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-		</form>
-	</div>
-	<div id="page1"></div>
-</div>
-</body>
 <script>
-    layui.use('laypage', function(){
-        var laypage = layui.laypage;
+    layui.use(['laydate','form'], function(){
+        var laydate = layui.laydate;
+        var form = layui.form;
+        laydate.render({
+            elem: '#L_birthday'
+        });
 
-		laypage.render({
-			elem: 'page1',
+        //监听提交
+        form.on('submit(save)', function(data){
+            console.log(data.field);
+            $.ajax({
+                type: 'put',
+                url: '/updateUserById?userId='+data.field.userId+'&birthday='+data.field.birthday,
+                //dataType:'JSON',
+                success: function(data){
+                    if (data == 'success'){
+                        layer.msg("更改成功");
+                    }else {
+                        layer.msg('更改失败');
+                    }
+                }
+            });
+            return false;
+        });
 
-			theme: '#FFB800', //自定义颜色
-			limits: [5,10,15,20,25],
-			layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip'],
-
-		});
 
     });
 </script>
+
+</body>
 
 </html>

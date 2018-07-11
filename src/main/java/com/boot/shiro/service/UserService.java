@@ -21,11 +21,19 @@ public class UserService extends AbstractService<User>{
         return this.userMapper;
     }
 
-    public PageInfo<User> findAll(Integer page,Integer pageSize){
-        PageHelper.startPage(page, pageSize);
-        List<User> users = userMapper.selectAll();
-        PageInfo<User> pageInfo = new PageInfo<User>(users);
-        return pageInfo;
+    public PageInfo<User> findAll(Integer page,Integer pageSize,User user){
+
+        if (user.getUsername() == null || "".equals(user.getUsername())){
+            PageHelper.startPage(page, pageSize);
+            List<User> users = userMapper.selectAll();
+            PageInfo<User> pageInfo = new PageInfo<User>(users);
+            return pageInfo;
+        }else {
+            PageHelper.startPage(page, pageSize);
+            List<User> users = userMapper.searchUsers(user);
+            PageInfo<User> pageInfo = new PageInfo<User>(users);
+            return pageInfo;
+        }
     }
 
     public boolean login(User user){
@@ -55,6 +63,23 @@ public class UserService extends AbstractService<User>{
             return true;
         }
         return false;
+    }
+
+    /**
+     * 添加用户
+     * @param user
+     * @return 1：添加成功  2：用户名重复  3：添加失败
+     */
+    public Integer addUser(User user){
+        int i1 = userMapper.checkUsername(user.getUsername());
+        if (i1 <= 1){
+            int i = userMapper.insert(user);
+            if (i >= 1){
+                return 1;
+            }
+            return 3;
+        }
+        return 2;
     }
 
 }

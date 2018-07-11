@@ -28,17 +28,17 @@
 </div>
 <div class="x-body">
 	<div class="layui-row">
-		<form class="layui-form layui-col-md12 x-so">
-			<input class="layui-input" placeholder="开始日" name="start" id="start">
-			<input class="layui-input" placeholder="截止日" name="end" id="end">
-			<input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-			<button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-		</form>
+		<div class="demoTable">
+			姓名：
+			<div class="layui-inline">
+				<input class="layui-input" name="username" id="demoReload" autocomplete="off">
+			</div>
+			<button class="layui-btn" data-type="reload">搜索</button>
+		</div>
 	</div>
 	<xblock>
-		<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-		<button class="layui-btn" onclick="x_admin_show('添加用户','./admin-add.html')"><i class="layui-icon"></i>添加</button>
-		<span class="x-right" style="line-height:40px">共有数据：88 条</span>
+		<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除(还没做)</button>
+		<button class="layui-btn" onclick="x_admin_show('添加用户','/toUserAdd',600,400)"><i class="layui-icon"></i>添加</button>
 	</xblock>
 
 
@@ -77,8 +77,31 @@
                 first: false ,//不显示首页
                 last: false, //不显示尾页
                 limit:10
-            }
+            },
+            id: 'testReload'
         });
+		//**********************layui自定义搜索开始
+        var $ = layui.$, active = {
+            reload: function(){
+                var demoReload = $('#demoReload');
+
+                table.reload('testReload', {
+                    where: {
+                        username: demoReload.val()
+                    }
+                });
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        //**********************layui自定义搜索结束
+        // form.on('submit(search)',function (data) {
+        //     console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value}
+        //     return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        // });
 
         //监听锁定操作
         form.on('switch(lockDemo)', function(obj){
@@ -122,27 +145,6 @@
             }
         });
 
-        var $ = layui.$, active = {
-            getCheckData: function(){ //获取选中数据
-                var checkStatus = table.checkStatus('idTest')
-                    ,data = checkStatus.data;
-                layer.alert(JSON.stringify(data));
-            }
-            ,getCheckLength: function(){ //获取选中数目
-                var checkStatus = table.checkStatus('idTest')
-                    ,data = checkStatus.data;
-                layer.msg('选中了：'+ data.length + ' 个');
-            }
-            ,isAll: function(){ //验证是否全选
-                var checkStatus = table.checkStatus('idTest');
-                layer.msg(checkStatus.isAll ? '全选': '未全选')
-            }
-        };
-
-        $('.demoTable .layui-btn').on('click', function(){
-            var type = $(this).data('type');
-            active[type] ? active[type].call(this) : '';
-        });
     });
 </script>
 <script type="text/html" id="barDemo">
@@ -151,6 +153,9 @@
 	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
+
+
+
     function x_admin_show(title,url,w,h){
         if (title == null || title == '') {
             title=false;

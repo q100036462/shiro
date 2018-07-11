@@ -27,12 +27,15 @@ public class UserController {
 
     @RequestMapping("/userList")
     @ResponseBody
-    public Map<String, Object> findAll(@RequestParam(value = "page",required = false) Integer page,@RequestParam(value = "pageSize",required = false) Integer pageSize){
+    public Map<String, Object> findAll(@RequestParam(value = "page",required = false) Integer page,@RequestParam(required = false) String username,@RequestParam(value = "pageSize",required = false) Integer pageSize){
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        if (pageSize == null){
-            pageSize = 10;
-        }
-        PageInfo<User> pager = userService.findAll(page,pageSize);
+        PageInfo<User> pager = new PageInfo<>();
+        pageSize = 10;
+        User user = new User();
+        user.setUsername(username);
+        pager = userService.findAll(page,pageSize,user);
+
+
         resultMap.put("code", 0);
         resultMap.put("msg", "");
         //总条数
@@ -89,5 +92,24 @@ public class UserController {
             return "success";
         }
         return "error";
+    }
+    //跳转到用户添加页面
+    @RequestMapping("/toUserAdd")
+    public String toUserAdd(){
+
+        return "page/user/user_add";
+    }
+    //添加用户
+    @RequestMapping("/addUser")
+    @ResponseBody
+    public String addUser(User user){
+        Integer b = userService.addUser(user);
+        if (b == 1){
+            return "success";
+        }else if (b == 2){
+            return "echo";
+        }else {
+            return "error";
+        }
     }
 }

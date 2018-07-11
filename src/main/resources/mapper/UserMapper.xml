@@ -41,5 +41,31 @@
           where user_id = #{userId}
     </update>
 
+    <select id="checkUsername" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(username) from user where username = #{username}
+    </select>
+
+    <select id="searchUsers" parameterType="User" resultType="User">
+        select
+          *
+        from
+          user
+        <where>
+            1=1
+            <if test="username != null and username != '' ">
+                and username like "%"#{username}"%"
+            </if>
+            <if test="password != null and password != '' ">
+                and password = #{password}
+            </if>
+            <if test="birthday != null ">
+                and birthday = #{birthday}
+            </if>
+            <if test="type != null and type != '' ">
+                type = #{type}
+            </if>
+        </where>
+    </select>
+
 
 </mapper>

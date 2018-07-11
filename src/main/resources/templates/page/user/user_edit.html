@@ -50,7 +50,7 @@
                 <span class="x-red">*</span>生日
             </label>
             <div class="layui-input-inline">
-                <input th:value="${user.birthday}" type="text" id="L_birthday" name="birthday" placeholder="yyyy-MM-dd" required="" lay-verify="date" autocomplete="off" class="layui-input">
+                <input th:value="${#dates.format(user.birthday,'yyyy-MM-dd')}"  type="text" id="L_birthday" name="birthday" placeholder="yyyy-MM-dd" required="" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -75,49 +75,10 @@
             layer.msg("保存失败");
         }
         laydate.render({
-            elem: '#L_birthday'
+            elem: '#L_birthday',
+            format: 'yyyy-MM-dd'
         });
-
-        // //监听提交
-        // form.on('submit(save)', function(data){
-        //     $.ajax({
-        //         type: 'post',
-        //         url: '/updateUserById',
-        //         data: data.field,
-        //         dataType:'JSON',
-        //         success: function(data){
-        //             if (data == 'success'){
-        //                 layer.msg("更改成功");
-        //             }else {
-        //                 layer.msg('更改失败');
-        //             }
-        //         }
-        //     });
-        //     return false;
-        // });
-
-
     });
-    // function update() {
-    //     var userId = $("#L_userId").val();
-    //     var birthday = $("#L_birthday").val();
-    //     layer.msg(birthday);
-    //     $.ajax({
-    //         type: 'post',
-    //         url: '/updateUserById',
-    //         data: {
-    //             userId:userId,
-    //             birthday:birthday
-    //         },
-    //         success: function(data){
-    //             if (data == 'success'){
-    //                 layer.msg("更改成功");
-    //             }else {
-    //                 layer.msg('更改失败');
-    //             }
-    //         }
-    //     });
-    // }
 </script>
 </body>
 

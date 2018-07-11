@@ -1,6 +1,7 @@
 package com.boot.shiro.service;
 
 import com.boot.shiro.entity.User;
+import com.boot.shiro.mapper.RoleMapper;
 import com.boot.shiro.mapper.UserMapper;
 import com.boot.shiro.utils.AbstractService;
 import com.github.pagehelper.Page;
@@ -70,13 +71,19 @@ public class UserService extends AbstractService<User>{
      * @param user
      * @return 1：添加成功  2：用户名重复  3：添加失败
      */
-    public Integer addUser(User user){
+    public Integer addUser(User user,Integer roleId){
         int i1 = userMapper.checkUsername(user.getUsername());
         if (i1 < 1){
             user.setType(1);
             int i = userMapper.insert(user);
             if (i >= 1){
-                return 1;
+                User user1 = userMapper.selectOne(user);
+                int i2 = userMapper.addRole(user1.getUserId(), roleId);
+                if (i2>=1){
+                    return 1;
+                }else {
+                    return 3;
+                }
             }
             return 3;
         }

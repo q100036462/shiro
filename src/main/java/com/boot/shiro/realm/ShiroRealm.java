@@ -4,11 +4,15 @@ import com.boot.shiro.entity.User;
 import com.boot.shiro.mapper.UserMapper;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShiroRealm extends AuthorizingRealm {
 
@@ -52,8 +56,26 @@ public class ShiroRealm extends AuthorizingRealm {
 	 * 授权
 	 */
 	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
-		return null;
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection collection) {
+		// 1.获取从认证阶段传递过来的用户信息/用户�? SimpleAuthenticationInfo的第�?个参�?
+		String username = (String) collection.getPrimaryPrincipal();
+		List<String> roleList = null;
+		List<String> permissionList = null;
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+		// 2.通过用户名查询该用户�?拥有的角�?
+		if (!"".equals(username)) {
+			// 用户名传递时没有丢失
+			roleList = userMapper.selectRolesByUsername(username);
+			// 3.通过username查询该用户下�?拥有的权�?
+			permissionList = userMapper.selectPermissionsByUsername(username);
+		} else {
+			roleList = new ArrayList<String>();
+			permissionList = new ArrayList<String>();
+		}
+		// 4.把从数据库中查询出的角色和权限信息放入SimpleAuthorizationInfo对象�?
+		info.addRoles(roleList);
+		info.addStringPermissions(permissionList);
+		return info;
 	}
 
 	public static void main(String[] args) {

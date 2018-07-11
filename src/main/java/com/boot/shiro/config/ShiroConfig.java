@@ -1,5 +1,6 @@
 package com.boot.shiro.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.boot.shiro.realm.ShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
@@ -13,11 +14,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 @SpringBootApplication
-public class shiroConfig {
+public class ShiroConfig {
     /**
      * @description
      * 		把shiro的生命周期交给spring进行托管
@@ -74,7 +77,10 @@ public class shiroConfig {
     @Bean(name = "ehCacheManager")
     @DependsOn("lifecycleBeanPostProcessor")
     public EhCacheManager ehCacheManager() {
-        return new EhCacheManager();
+        System.out.println("缓存初始化");
+        EhCacheManager cacheManager = new EhCacheManager();
+        cacheManager.setCacheManagerConfigFile("classpath:config/ehcache-shiro.xml");
+        return cacheManager;
     }
 
     /**
@@ -108,6 +114,7 @@ public class shiroConfig {
         // 2.实现filterChainDefinitions
         // 2.1.创建LinkedHashMap
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+        filterChainDefinitionMap.put("/favicon.ico","anon");
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/toReg", "anon");
@@ -115,7 +122,7 @@ public class shiroConfig {
         filterChainDefinitionMap.put("/**", "authc");
         // 3.实现LoginUrl,SuccessUrl,UnauthorizedUrl
         filter.setLoginUrl("/login");
-        filter.setSuccessUrl("/index");
+        filter.setSuccessUrl("/");
         filter.setUnauthorizedUrl("/404");
 
         filter.setFilterChainDefinitionMap(filterChainDefinitionMap);
@@ -150,4 +157,11 @@ public class shiroConfig {
         aASA.setSecurityManager(securityManager());
         return aASA;
     }
+
+    @Bean
+    public ShiroDialect shiroDialect(){
+        return new ShiroDialect();
+    }
+
+
 }

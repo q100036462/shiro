@@ -1,6 +1,7 @@
 package com.boot.shiro.mapper;
 
 import com.boot.shiro.entity.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -17,4 +18,10 @@ public interface UserMapper extends Mapper<User> {
     List<User> searchUsers(User user);
 
     int checkUsername(String username);
+
+    List<String> selectPermissionsByUsername(String roleId);
+
+    List<String> selectRolesByUsername(String username);
+
+    int addRole(@Param(value = "userId") Integer userId,@Param(value = "roleId") Integer roleId);
 }

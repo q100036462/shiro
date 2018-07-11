@@ -1,8 +1,11 @@
 package com.boot.shiro.controller;
 
+import com.boot.shiro.entity.Role;
 import com.boot.shiro.entity.User;
+import com.boot.shiro.service.RoleService;
 import com.boot.shiro.service.UserService;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +21,9 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
+
 
     @RequestMapping("/user")
     public String toUserlistPage(){
@@ -27,6 +33,7 @@ public class UserController {
 
     @RequestMapping("/userList")
     @ResponseBody
+    @RequiresRoles("admin")
     public Map<String, Object> findAll(@RequestParam(value = "page",required = false) Integer page,@RequestParam(required = false) String username,@RequestParam(value = "pageSize",required = false) Integer pageSize){
         Map<String, Object> resultMap = new HashMap<String, Object>();
         PageInfo<User> pager = new PageInfo<>();
@@ -102,8 +109,8 @@ public class UserController {
     //添加用户
     @RequestMapping("/addUser")
     @ResponseBody
-    public String addUser(User user){
-        Integer b = userService.addUser(user);
+    public String addUser(User user,Integer roleId){
+        Integer b = userService.addUser(user,roleId);
         if (b == 1){
             return "success";
         }else if (b == 2){
@@ -115,8 +122,8 @@ public class UserController {
 
     @RequestMapping("/reg")
     @ResponseBody
-    public String reg(User user){
-        Integer b = userService.addUser(user);
+    public String reg(User user ,Integer roleId){
+        Integer b = userService.addUser(user,roleId);
         if (b == 1){
             return "success";
         }else if (b == 2){

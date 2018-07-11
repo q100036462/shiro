@@ -109,8 +109,9 @@ public class shiroConfig {
         // 2.1.创建LinkedHashMap
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         filterChainDefinitionMap.put("/logout", "logout");
-        filterChainDefinitionMap.put("/favicon.ico", "anon");
         filterChainDefinitionMap.put("/static/**", "anon");
+        filterChainDefinitionMap.put("/toReg", "anon");
+        filterChainDefinitionMap.put("/reg", "anon");
         filterChainDefinitionMap.put("/**", "authc");
         // 3.实现LoginUrl,SuccessUrl,UnauthorizedUrl
         filter.setLoginUrl("/login");

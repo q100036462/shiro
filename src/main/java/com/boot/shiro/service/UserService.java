@@ -72,7 +72,8 @@ public class UserService extends AbstractService<User>{
      */
     public Integer addUser(User user){
         int i1 = userMapper.checkUsername(user.getUsername());
-        if (i1 <= 1){
+        if (i1 < 1){
+            user.setType(1);
             int i = userMapper.insert(user);
             if (i >= 1){
                 return 1;

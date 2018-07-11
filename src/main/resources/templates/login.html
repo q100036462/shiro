@@ -1,33 +1,42 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-	<title>后台登录</title>
-	<link rel="stylesheet" href="../static/css/font.css">
-	<link rel="stylesheet" type="text/css" href="../static/lib/layui/css/layui.css" />
-	<link rel="stylesheet" type="text/css" href="../static/css/xadmin.css" />
-	<script src="../static/lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
-	<script type="text/javascript" src="../static/jquery/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="../static/js/xadmin.js"></script>
+	<meta charset="utf-8" />
+	<title></title>
+	<link rel="stylesheet" href="../static/lib/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="../static/css/login.css" media="all">
+	<link rel="stylesheet" href="../static/css/admin.css" media="all">
 </head>
+<body>
+<div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
 
-<body class="login-bg">
-	<div class="login layui-anim layui-anim-up">
-		<div class="message">x-admin2.0-管理登录</div>
-		<div id="darkbannerwrap"></div>
-			<form method="post" class="layui-form" action="login" >
-				<div th:text="${error}"></div>
-				<input name="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
-				<hr class="hr15">
-				<input name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
-				<hr class="hr15">
-				<input value="登录" lay-submit lay-filter="login" style="width:100%;" class="layui-btn layui-btn-normal" type="submit">
-				<hr class="hr20" >
-			</form>
+	<div class="layadmin-user-login-main">
+		<div class="layadmin-user-login-box layadmin-user-login-header">
+			<h2>后台管理系统</h2>
+			<p>后台管理系统登录页面</p>
+		</div>
+		<form class="layadmin-user-login-box layadmin-user-login-body layui-form" action="/login" method="post">
+			<div class="layui-form-item">
+				<label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label>
+				<input type="text" name="username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input">
+			</div>
+			<div class="layui-form-item">
+				<label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
+				<input type="password" name="password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input">
+			</div>
+			<div class="layui-form-item">
+				<input class="layui-btn layui-btn-fluid" value="登录"  type="submit" />
+			</div>
+			<div class="layui-trans layui-form-item layadmin-user-login-other">
+				<a href="/toReg" class="layadmin-user-jump-change layadmin-link">注册帐号</a>
+			</div>
+		</form>
 	</div>
 
-</body>
+</div>
 
+<script src="../static/lib/layui/layui.js"></script>
+
+
+</body>
 </html>

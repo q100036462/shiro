@@ -62,6 +62,11 @@ public class LoginController {
         return "login";
     }
 
+    @RequestMapping("toReg")
+    private String toReg(){
+        return "reg";
+    }
+
     @RequestMapping("/main")
     public String main(){
         return "page/main";

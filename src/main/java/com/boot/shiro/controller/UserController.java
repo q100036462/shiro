@@ -112,4 +112,17 @@ public class UserController {
             return "error";
         }
     }
+
+    @RequestMapping("/reg")
+    @ResponseBody
+    public String reg(User user){
+        Integer b = userService.addUser(user);
+        if (b == 1){
+            return "success";
+        }else if (b == 2){
+            return "echo";
+        }else {
+            return "error";
+        }
+    }
 }
